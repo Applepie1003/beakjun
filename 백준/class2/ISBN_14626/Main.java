@@ -15,33 +15,98 @@ public class Main {
     public static void main(String[] args) {
         LinkedListStack linkedListStack = new LinkedListStack();
         
-
-        
         Scanner sc = new Scanner(System.in);
 
         int N = sc.nextInt();
         String input;
 
-
-        while (N == 0) {
-            N -= 1;
+        for (;N >= 0; N--) {
             input = sc.nextLine();
-            String[] tokens = input.split("\\s+");
+            String[] tokens = input.split(" ", -1);
+            String command = tokens[0];
+
             for (String token : tokens) {
-                if (token == "push") {
-                    linkedListStack.push(tokens[1]);
-                } else if (token == "pop") {
+                if (token.equals("push")) {
+                    int value = Integer.parseInt(tokens[1]);
+                    linkedListStack.push(value);
+                } else if (token.equals("pop")) {
                     System.out.println(linkedListStack.pop());
-                } else if (token == "size") {
+                } else if (token.equals("size")) {
                     System.out.println(linkedListStack.size());
-                } else if (token == "empty") {
-                    linkedListStack.isStackEmpty();
-                    System.out.println();
-                } else if (token == "top") {
-                    linkedListStack.peek();
-                    System.out.println();
+                } else if (token.equals("empty")) {
+                    if (linkedListStack.isStackEmpty()) {
+                        System.out.println(1);
+                    } else {
+                        System.out.println(0);
+                    }
+                } else if (token.equals("top")) {
+                    System.out.println(linkedListStack.peek());
                 }
             }
         }
+
+        sc.close();
+    }
+
+    static class LinkedListStack {
+
+        private class Node {
+            int data;
+            Node next;
+
+            Node(int data) {
+                this.data = data;
+                this.next = null;
+            }
+        }
+
+        private Node top; // 스택의 최상위 노드
+        private int size;
+
+        public LinkedListStack() { // 생성자
+            this.top = null;
+            this.size = 0;
+        }
+
+        public void push(int data) {
+            Node newNode = new Node(data);
+            newNode.next = top;
+            top = newNode;
+            size +=1 ;
+        }
+        
+        public int pop() {
+            int tmp;
+            if (isStackEmpty()) {
+                return -1;
+            } else if(size() == 1) {
+                tmp = top.data;
+                this.top = null;    
+            } else {
+                tmp = top.data;
+                this.top = top.next;
+                size -= 1;
+            }
+            return tmp;
+        }
+
+        public int size() {
+            return this.size;
+        }
+
+        // 최상의 요소 확인
+        public int peek() {
+            if(isStackEmpty()) {
+                return -1;
+            }
+            return top.data;
+        }
+
+        // stack이 비어 있는지 확인
+        public boolean isStackEmpty() {
+            return top == null;
+        }
+
+        
     }
 }
